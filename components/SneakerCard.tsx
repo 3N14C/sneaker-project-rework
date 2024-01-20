@@ -135,8 +135,9 @@ export const SneakerCard: FC<ISneakerCardProps> = ({ sneaker }) => {
 
                 <Text style={{ ...styles.sneakerPrice }}>
                   {(
-                    (+sneaker.price * currentPrice * +sneaker.offer.discount) /
-                    100
+                    +sneaker?.price *
+                    currentPrice *
+                    (1 - +sneaker?.offer.discount / 100)
                   ).toLocaleString("ru-RU", {
                     style: "currency",
                     currency: "RUB",

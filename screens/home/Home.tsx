@@ -12,6 +12,7 @@ import { useAuth } from "../../context/AuthContext";
 import { Offer } from "./_components/offer/Offer";
 import { useNavigation } from "@react-navigation/native";
 import { Brand } from "./_components/brand/Brand";
+import { ModalPortal } from "react-native-modals";
 
 export const Home: FC = () => {
   const { user } = useAuth();
@@ -19,12 +20,11 @@ export const Home: FC = () => {
   const [search, setSearch] = useState<string>("");
   const { navigate } = useNavigation();
 
-  console.log(user)
-
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <View style={styles.container}>
-        {/* {data.role !== "ADMIN" ? (
+    <>
+      <ScrollView style={{ flex: 1, backgroundColor: "#fff" }}>
+        <View style={styles.container}>
+          {/* {data.role !== "ADMIN" ? (
           <>
             <Header
               avatar={data.avatar}
@@ -76,49 +76,50 @@ export const Home: FC = () => {
           </>
         )} */}
 
-        <>
-          <Header avatar={""} username={user?.name || ""} />
+          <>
+            <Header avatar={""} username={user?.name || ""} />
 
-          {/* <Search
+            {/* <Search
             search={search}
             setSearch={setSearch}
             getSneakerData={sneakerData}
           /> */}
 
-          {search.length === 0 && (
-            <>
-              <View style={styles.offer}>
-                <Text style={styles.title}>Специальные предложения</Text>
+            {search.length === 0 && (
+              <>
+                <View style={styles.offer}>
+                  <Text style={styles.title}>Специальные предложения</Text>
 
-                <TouchableHighlight
-                  underlayColor={"transparent"}
-                  //@ts-expect-error
-                  onPress={() => navigate("Special Offers")}
-                >
-                  <Text
-                    style={{
-                      ...styles.title,
-                      fontSize: 15,
-                      maxWidth: "100%",
-                      padding: 20,
-                    }}
+                  <TouchableHighlight
+                    underlayColor={"transparent"}
+                    //@ts-expect-error
+                    onPress={() => navigate("Special Offers")}
                   >
-                    Посмотреть все
-                  </Text>
-                </TouchableHighlight>
-              </View>
+                    <Text
+                      style={{
+                        ...styles.title,
+                        fontSize: 15,
+                        maxWidth: "100%",
+                        padding: 20,
+                      }}
+                    >
+                      Посмотреть все
+                    </Text>
+                  </TouchableHighlight>
+                </View>
 
-              <Offer />
+                <Offer />
 
-              <Brand />
+                <Brand />
 
-              {/* <Popular />  */}
-            </>
-          )}
-          <StatusBar />
-        </>
-      </View>
-    </ScrollView>
+                {/* <Popular />  */}
+              </>
+            )}
+            <StatusBar />
+          </>
+        </View>
+      </ScrollView>
+    </>
   );
 };
 

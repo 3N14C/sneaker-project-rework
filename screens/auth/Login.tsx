@@ -17,6 +17,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { useAuth } from "../../context/AuthContext";
 import LoadingScreen from "../../components/LoadingScreen";
+import { AppwriteException } from "appwrite";
 
 export const Login: FC = () => {
   const { login, user, loading } = useAuth();
@@ -41,16 +42,13 @@ export const Login: FC = () => {
     getUser();
   }, [user]);
 
-  const { mutateAsync, isPending } = useMutation({
+  const { mutateAsync, isPending, isError } = useMutation({
     mutationFn: async () => {
       try {
         await login({
           email: getValues().email,
           password: getValues().password,
         });
-
-        //@ts-ignore
-        navigation.navigate("Home");
       } catch (error) {
         console.log(error);
       }
@@ -66,7 +64,7 @@ export const Login: FC = () => {
       .email({ message: "Invalid email" }),
     password: z
       .string({ required_error: "Password is required" })
-      .min(6, { message: "Password must be at least 6 characters" }),
+      .min(9, { message: "Password must be at least 9 characters" }),
   });
 
   const {

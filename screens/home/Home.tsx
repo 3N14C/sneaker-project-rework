@@ -19,6 +19,8 @@ export const Home: FC = () => {
   const [search, setSearch] = useState<string>("");
   const { navigate } = useNavigation();
 
+  console.log(user)
+
   return (
     <ScrollView style={{ flex: 1, backgroundColor: "#fff" }}>
       <View style={styles.container}>

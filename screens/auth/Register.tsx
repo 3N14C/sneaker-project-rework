@@ -28,15 +28,12 @@ export const Register: FC = () => {
     mutationFn: async () => {
       try {
         await signup({
-        name: getValues().username,
-        email: getValues().email,
-        password: getValues().password,
-      });
-
-      
-
+          name: getValues().username,
+          email: getValues().email,
+          password: getValues().password,
+        });
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
   });
@@ -51,8 +48,7 @@ export const Register: FC = () => {
       .email({ message: "Invalid email" }),
     password: z
       .string({ required_error: "Password is required" })
-      .min(6, { message: "Password must be at least 6 characters" }),
-    lastname: z.string({ invalid_type_error: "Last name must be a string" }),
+      .min(9, { message: "Password must be at least 9 characters" }),
   });
 
   const {
@@ -65,7 +61,6 @@ export const Register: FC = () => {
       username: "",
       email: "",
       password: "",
-      lastname: "",
     },
     resolver: zodResolver(schema),
   });

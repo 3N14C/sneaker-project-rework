@@ -11,7 +11,7 @@ import { useCurrentPrice } from "../hooks/useCurrentPrice";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { ISneaker } from "../interfaces/query/sneaker.interface";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import { Carousel } from "react-native-basic-carousel";
+// import { Carousel } from "react-native-basic-carousel";
 import { StyleSheet } from "react-native";
 import { useQuery } from "@tanstack/react-query";
 import { db } from "../appwrite/appwrite";
@@ -19,6 +19,7 @@ import { APPWRITE_DB, COLLECTION_SIZE } from "../appwrite/appwrite.constants";
 import { ISize } from "../interfaces/query/size.interface";
 import { useCartStore } from "../store/cart-store/store";
 import Toast from "react-native-toast-message";
+import Carousel from "react-native-reanimated-carousel";
 
 interface IModalSneakerProps {
   modalVisible: boolean;
@@ -46,8 +47,31 @@ export const ModalSneaker: FC<IModalSneakerProps> = ({
   if (isLoading) return <></>;
 
   const onFocus = (idx: number) => {
-    if (focus === idx) setFocus(null);
-    return setFocus(idx);
+    if (focus === idx) {
+      setFocus(null);
+    } else {
+      setFocus(idx);
+    }
+
+    if (
+      !modelSize![idx]?.sneaker.some(
+        (sneaker) => sneaker?.name === sneaker?.name
+      )
+    ) {
+      Toast.show({
+        type: "error",
+        text1: "Размера нет в наличии!",
+        visibilityTime: 2000,
+        position: "top",
+      });
+    } else {
+      Toast.show({
+        type: "info",
+        text1: "Размер товара есть в наличии!",
+        visibilityTime: 2000,
+        position: "top",
+      });
+    }
   };
 
   const validationToAdd = () => {
@@ -119,7 +143,14 @@ export const ModalSneaker: FC<IModalSneakerProps> = ({
                 />
                 <View style={{ alignItems: "center" }}>
                   <Carousel
+                    loop
+                    autoPlay={sneaker.image?.length > 1 ? true : false}
+                    width={Dimensions.get("window").width}
+                    height={300}
                     data={sneaker.image}
+                    pagingEnabled={true}
+                    maxScrollDistancePerSwipe={0.5}
+                    autoFillData
                     renderItem={({ item }) => (
                       <Image
                         source={{
@@ -132,10 +163,6 @@ export const ModalSneaker: FC<IModalSneakerProps> = ({
                         }}
                       />
                     )}
-                    itemWidth={Dimensions.get("window").width}
-                    autoplay
-                    pagination
-                    autoplayDelay={1000}
                   />
                 </View>
 
@@ -240,65 +267,6 @@ export const ModalSneaker: FC<IModalSneakerProps> = ({
                               </TouchableOpacity>
                             ))}
                           </View>
-
-                          {!modelSize![focus!] ? (
-                            <
-                              // style={{
-                              //   flex: 1,
-                              //   textAlign: "center",
-                              //   marginTop: 20,
-                              //   borderWidth: 1,
-                              //   borderColor: "#ff9095",
-                              //   alignItems: "center",
-                              //   justifyContent: "center",
-                              //   color: "#ff9095",
-                              //   padding: 10,
-                              //   borderRadius: 5,
-                              // }}
-                            >
-                              {/* Пожалуйста, выберите размер */}
-                            </>
-                          ) : !modelSize![focus!]?.sneaker
-                              .map((sneaker) => sneaker?.name)
-                              .includes(sneaker?.name) ? (
-                            <Text
-                              style={{
-                                flex: 1,
-                                textAlign: "center",
-                                marginTop: 20,
-                                borderWidth: 1,
-                                borderColor: "#ff9095",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                color: "#ff9095",
-                                padding: 10,
-                                borderRadius: 5,
-                              }}
-                            >
-                              На данный момент размера нет в наличии
-                            </Text>
-                          ) : (
-                            modelSize![focus!]?.sneaker
-                              .map((sneaker) => sneaker?.name)
-                              .includes(sneaker?.name) && (
-                              <Text
-                                style={{
-                                  flex: 1,
-                                  textAlign: "center",
-                                  marginTop: 20,
-                                  borderWidth: 1,
-                                  borderColor: "#44aa44",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  color: "#44aa44",
-                                  padding: 10,
-                                  borderRadius: 5,
-                                }}
-                              >
-                                Размер есть в наличии
-                              </Text>
-                            )
-                          )}
                         </View>
                       </View>
 
@@ -334,10 +302,9 @@ export const ModalSneaker: FC<IModalSneakerProps> = ({
 
                               <Text style={{ ...styles.sneakerPrice }}>
                                 {(
-                                  (+sneaker?.price *
-                                    currentPrice *
-                                    +sneaker?.offer?.discount) /
-                                  100
+                                  +sneaker?.price *
+                                  currentPrice *
+                                  (1 - +sneaker?.offer.discount / 100)
                                 ).toLocaleString("ru-RU", {
                                   style: "currency",
                                   currency: "RUB",

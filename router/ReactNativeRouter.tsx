@@ -9,6 +9,7 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import { Category } from "../screens/category/Category";
 import UserRouter from "./components/UserRouter";
 import { useAuth } from "../context/AuthContext";
+import { ModalPortal } from "react-native-modals";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -212,6 +213,7 @@ export const ReactNativeRouter: FC = ({}) => {
           </Stack.Group> */}
         </Stack.Navigator>
       </NavigationContainer>
+      <ModalPortal />
     </>
   );
 };

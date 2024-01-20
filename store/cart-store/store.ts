@@ -24,15 +24,6 @@ export const useCartStore = create<ICartStore>()(
           set((state) => ({
             cartItems: state.cartItems.filter((i) => i !== item),
           })),
-
-        removeAllCart: () => set({ cartItems: [] }),
-
-        // removeOneCountCartItem: (item) =>
-        //   set((state) => ({
-        //     cartItems: state.cartItems.map((i) =>
-        //       i._id === item._id ? { ...i, count: i.count - 1 } : i
-        //     ),
-        //   })),
       }),
       { name: "cartStore", storage: createJSONStorage(() => AsyncStorage) }
     )

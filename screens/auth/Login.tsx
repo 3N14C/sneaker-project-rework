@@ -48,6 +48,9 @@ export const Login: FC = () => {
           email: getValues().email,
           password: getValues().password,
         });
+
+        //@ts-ignore
+        navigation.navigate("Home");
       } catch (error) {
         console.log(error);
       }
@@ -184,8 +187,6 @@ export const Login: FC = () => {
           underlayColor={"#393939"}
           onPress={handleSubmit(async () => {
             await mutateAsync();
-            // @ts-ignore
-            navigation.navigate("Home");
           })}
         >
           {isPending ? (

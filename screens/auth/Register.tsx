@@ -26,11 +26,18 @@ export const Register: FC = () => {
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: async () => {
-      await signup({
+      try {
+        await signup({
         name: getValues().username,
         email: getValues().email,
         password: getValues().password,
       });
+
+      
+
+      } catch (error) {
+        console.log(error)
+      }
     },
   });
 

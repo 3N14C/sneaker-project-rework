@@ -7,6 +7,7 @@ import { useCartStore } from "../../store/cart-store/store";
 import { Cart } from "../../screens/cart/Cart";
 import { Profile } from "../../screens/profile/Profile";
 import { Order } from "../../screens/order/Order";
+import { ModalPortal } from "react-native-modals";
 
 export default function UserRouter() {
   const { cartItems } = useCartStore();
@@ -207,6 +208,7 @@ export default function UserRouter() {
           //   initialParams={params}
         />
       </Tab.Navigator>
+      <ModalPortal />
     </>
   );
 }

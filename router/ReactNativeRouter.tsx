@@ -8,8 +8,11 @@ import { Text, View } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { Category } from "../screens/category/Category";
 import UserRouter from "./components/UserRouter";
-import { useAuth } from "../context/AuthContext";
 import { ModalPortal } from "react-native-modals";
+import { Favorite } from "../screens/favorite/Favorite";
+import { SpecialOffers } from "../screens/offers/SpecialOffers";
+import { SneakerOffer } from "../screens/[sneakerOffer]/SneakerOffer";
+import { Checkout } from "../screens/checkout/Checkout";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -59,7 +62,7 @@ export const ReactNativeRouter: FC = ({}) => {
           <Stack.Group
             screenOptions={{ headerShown: true, headerShadowVisible: false }}
           >
-            {/* <Stack.Screen
+            <Stack.Screen
               options={{ animation: "slide_from_right" }}
               name="Special Offers"
               component={SpecialOffers}
@@ -69,11 +72,11 @@ export const ReactNativeRouter: FC = ({}) => {
                 animation: "slide_from_right",
                 headerTitle: "Discount",
               }}
-              name="OfferList"
-              component={OfferList}
-            /> */}
+              name="SneakerOffer"
+              component={SneakerOffer}
+            />
 
-            {/* <Stack.Screen
+            <Stack.Screen
               options={{
                 animation: "slide_from_right",
                 headerTitle: () => {
@@ -106,28 +109,23 @@ export const ReactNativeRouter: FC = ({}) => {
                 },
               }}
               name="FavouriteList"
-              component={FavouriteList}
-            /> */}
+              component={Favorite}
+            />
 
             <Stack.Screen
               options={{ animation: "slide_from_right" }}
               name="Category"
               component={Category}
             />
-            {/* <Stack.Screen
+            <Stack.Screen
               options={{
                 animation: "slide_from_right",
                 headerTitle: "Подтверждение",
               }}
               name="Checkout"
-            >
-              {({ route }) => (
-                <>
-                  <Checkout userData={route?.params} />
-                </>
-              )}
-            </Stack.Screen>
-            <Stack.Screen
+              component={Checkout}
+            />
+            {/* <Stack.Screen
               options={{
                 animation: "slide_from_right",
                 headerTitle: "Способ оплаты",

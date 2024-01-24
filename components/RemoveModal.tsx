@@ -27,9 +27,9 @@ export const RemoveModal: FC<IProps> = ({ modalVisible, closeBottomSheet }) => {
 
   const sneaker = route?.params?.sneaker;
 
-  const currentPrice = useCurrentPrice()
+  const currentPrice = useCurrentPrice();
 
-  const {removeCartItem} = useCartStore()
+  const { removeCartItem } = useCartStore();
 
   return (
     <View>
@@ -41,14 +41,7 @@ export const RemoveModal: FC<IProps> = ({ modalVisible, closeBottomSheet }) => {
         modalAnimation={new SlideAnimation({ slideFrom: "bottom" })}
       >
         <ModalContent>
-          <TouchableOpacity
-            // style={{
-            //   flex: 1,
-            //   justifyContent: "flex-end",
-            //   backgroundColor: "rgba(0, 0, 0, 0.5)",
-            // }}
-            activeOpacity={1}
-          >
+          <TouchableOpacity activeOpacity={1}>
             <View style={{ paddingVertical: 0 }}>
               <View
                 style={{
@@ -201,7 +194,7 @@ export const RemoveModal: FC<IProps> = ({ modalVisible, closeBottomSheet }) => {
                         text1: "Товар удален из корзины",
                         visibilityTime: 2000,
                         position: "top",
-                      })
+                      });
                     }}
                   >
                     <Text style={{ color: "#fff" }}>Да, удалить</Text>
@@ -239,7 +232,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginBottom: 40,
     gap: 20,
-    marginLeft: -40
+    marginLeft: -40,
   },
 
   button: {

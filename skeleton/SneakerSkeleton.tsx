@@ -2,18 +2,18 @@ import { Skeleton } from "@rneui/themed";
 import { FC } from "react";
 import { StyleSheet, View } from "react-native";
 
-export const OfferSkeleton: FC<{ length?: number }> = ({ length }) => {
+export const SneakerSkeleton: FC<{ length?: number }> = ({ length }) => {
   return (
-    <View style={styles.container}>
+    <View style={styles.container_item}>
       {Array.from({ length: length || 10 }).map((_, idx) => (
         <Skeleton
           key={idx}
-          width={'100%'}
-          height={120}
+          height={80}
+          width={155}
           skeletonStyle={{
             backgroundColor: "#f3f3f3",
             backfaceVisibility: "hidden",
-            borderRadius: 30,
+            borderRadius: 10,
           }}
           style={{ backgroundColor: "transparent" }}
         />
@@ -23,8 +23,11 @@ export const OfferSkeleton: FC<{ length?: number }> = ({ length }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 30,
-    gap: 30
+  container_item: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 20,
   },
 });

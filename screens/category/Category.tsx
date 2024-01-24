@@ -19,7 +19,11 @@ export const Category: FC = () => {
   const { data, isLoading } = useQuery<IBrand>({
     queryKey: ["brandId"],
     queryFn: async (): Promise<IBrand | any> => {
-      return await db.getDocument(APPWRITE_DB, COLLECTION_BRAND, brand.$id);
+      try {
+        return await db.getDocument(APPWRITE_DB, COLLECTION_BRAND, brand.$id);
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
 

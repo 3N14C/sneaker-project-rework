@@ -14,13 +14,14 @@ import { ScrollView } from "react-native";
 import { useCurrentPrice } from "../../hooks/useCurrentPrice";
 import Toast from "react-native-toast-message";
 import { RemoveModal } from "../../components/RemoveModal";
+import { ModalPortal } from "react-native-modals";
 
 export const Cart: FC = () => {
   const { cartItems } = useCartStore();
   const { setParams, navigate } = useNavigation();
   const currentPrice = useCurrentPrice();
 
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
   const openBottomSheet = () => {
     setModalVisible(true);
   };
@@ -42,7 +43,7 @@ export const Cart: FC = () => {
   const handleAddToOrder = () => {
     if (cartItems?.length > 0) {
       // @ts-ignore
-      navigate("Checkout", data);
+      navigate("Checkout");
     } else {
       Toast.show({
         type: "error",
@@ -54,108 +55,134 @@ export const Cart: FC = () => {
   };
 
   return (
-    <View style={{ ...styles.container }}>
-      <RemoveModal
-        modalVisible={modalVisible}
-        closeBottomSheet={closeBottomSheet}
-      />
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{ marginBottom: 120 }}
-      >
-        {cartItems?.map((sneaker) => (
-          <View
-            style={{ backgroundColor: "#fff", marginBottom: 20 }}
-            key={sneaker.$id}
-          >
+    <>
+      <View style={{ ...styles.container }}>
+        {modalVisible && (
+          <RemoveModal
+            modalVisible={modalVisible}
+            closeBottomSheet={closeBottomSheet}
+          />
+        )}
+
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{ marginBottom: 120 }}
+        >
+          {cartItems?.map((sneaker) => (
             <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                paddingBottom: 20,
-                paddingTop: 20,
-                paddingLeft: 20,
-                paddingRight: 20,
-              }}
+              style={{ backgroundColor: "#fff", marginBottom: 20 }}
+              key={sneaker.$id}
             >
-              <Icon
-                size={18}
-                name="trash"
-                onPress={() => {
-                  //@ts-ignore
-                  setParams({
-                    sneaker: sneaker,
-                  });
-                  openBottomSheet();
-                }}
+              <View
                 style={{
-                  position: "absolute",
-                  right: -10,
-                  top: 20,
-                  zIndex: 22,
-                  width: 40,
-                  height: 40,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  paddingBottom: 20,
+                  paddingTop: 20,
+                  paddingLeft: 20,
+                  paddingRight: 20,
                 }}
-              />
-              <View style={{ ...styles.container_sneaker }}>
-                <Image
-                  width={100}
-                  style={{ paddingBottom: 100 }}
-                  source={{ uri: sneaker.image[0] }}
-                />
-              </View>
-
-              <View>
-                <View
-                  style={{
-                    marginLeft: 20,
+              >
+                <Icon
+                  size={18}
+                  name="trash"
+                  onPress={() => {
+                    //@ts-ignore
+                    setParams({
+                      sneaker: sneaker,
+                    });
+                    openBottomSheet();
                   }}
-                >
-                  <View style={{}}>
-                    <Text
-                      style={{
-                        marginRight: 10,
-                        fontWeight: "bold",
-                        fontSize: 15,
-                        width: "90%",
-                      }}
-                    >
-                      {sneaker.name.length > 15
-                        ? sneaker.name.slice(0, 15) + "..."
-                        : sneaker.name}
-                    </Text>
-                  </View>
+                  style={{
+                    position: "absolute",
+                    right: -10,
+                    top: 20,
+                    zIndex: 22,
+                    width: 40,
+                    height: 40,
+                  }}
+                />
+                <View style={{ ...styles.container_sneaker }}>
+                  <Image
+                    width={100}
+                    style={{ paddingBottom: 100 }}
+                    source={{ uri: sneaker.image[0] }}
+                  />
+                </View>
 
-                  <View style={{ flexDirection: "row" }}>
-                    <Text
-                      style={{
-                        ...styles.sneakerSize,
-                        marginTop: sneaker.name.length > 15 ? 10 : 10,
-                      }}
-                    >
-                      {/* @ts-ignore */}
-                      {sneaker.size}
-                    </Text>
-                  </View>
+                <View>
+                  <View
+                    style={{
+                      marginLeft: 20,
+                    }}
+                  >
+                    <View style={{}}>
+                      <Text
+                        style={{
+                          marginRight: 10,
+                          fontWeight: "bold",
+                          fontSize: 15,
+                          width: "90%",
+                        }}
+                      >
+                        {sneaker.name.length > 15
+                          ? sneaker.name.slice(0, 15) + "..."
+                          : sneaker.name}
+                      </Text>
+                    </View>
 
-                  <View>
-                    <Text style={{ ...styles.sneakerPrice }}>
-                      {sneaker?.offer.discount ? (
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                          }}
-                        >
-                          <Text
+                    <View style={{ flexDirection: "row" }}>
+                      <Text
+                        style={{
+                          ...styles.sneakerSize,
+                          marginTop: sneaker.name.length > 15 ? 10 : 10,
+                        }}
+                      >
+                        {/* @ts-ignore */}
+                        {sneaker.size}
+                      </Text>
+                    </View>
+
+                    <View>
+                      <Text style={{ ...styles.sneakerPrice }}>
+                        {sneaker?.offer.discount ? (
+                          <View
                             style={{
-                              ...styles.sneakerPrice,
-                              fontSize: 15,
-                              marginRight: 10,
-                              textDecorationLine: "line-through",
-                              color: "#ccc",
+                              flexDirection: "row",
+                              alignItems: "center",
                             }}
                           >
+                            <Text
+                              style={{
+                                ...styles.sneakerPrice,
+                                fontSize: 15,
+                                marginRight: 10,
+                                textDecorationLine: "line-through",
+                                color: "#ccc",
+                              }}
+                            >
+                              {(+sneaker?.price * currentPrice).toLocaleString(
+                                "ru-RU",
+                                {
+                                  style: "currency",
+                                  currency: "RUB",
+                                }
+                              )}
+                            </Text>
+
+                            <Text style={{ ...styles.sneakerPrice }}>
+                              {(
+                                +sneaker?.price *
+                                currentPrice *
+                                (1 - +sneaker?.offer.discount / 100)
+                              ).toLocaleString("ru-RU", {
+                                style: "currency",
+                                currency: "RUB",
+                              })}
+                            </Text>
+                          </View>
+                        ) : (
+                          <Text style={{ ...styles.sneakerPrice }}>
                             {(+sneaker?.price * currentPrice).toLocaleString(
                               "ru-RU",
                               {
@@ -164,68 +191,51 @@ export const Cart: FC = () => {
                               }
                             )}
                           </Text>
-
-                          <Text style={{ ...styles.sneakerPrice }}>
-                            {(
-                              +sneaker?.price *
-                              currentPrice *
-                              (1 - +sneaker?.offer.discount / 100)
-                            ).toLocaleString("ru-RU", {
-                              style: "currency",
-                              currency: "RUB",
-                            })}
-                          </Text>
-                        </View>
-                      ) : (
-                        <Text style={{ ...styles.sneakerPrice }}>
-                          {(+sneaker?.price * currentPrice).toLocaleString(
-                            "ru-RU",
-                            {
-                              style: "currency",
-                              currency: "RUB",
-                            }
-                          )}
-                        </Text>
-                      )}
-                    </Text>
+                        )}
+                      </Text>
+                    </View>
                   </View>
                 </View>
               </View>
             </View>
-          </View>
-        ))}
-      </ScrollView>
+          ))}
+        </ScrollView>
 
-      <View style={[styles.containerOrder]}>
-        <View>
-          <Text style={{ color: "#adadab", fontSize: 12 }}>Итоговая цена</Text>
-          <Text style={{ color: "#222223", fontWeight: "bold", fontSize: 25 }}>
-            {totalPrice.toLocaleString("ru-RU", {
-              style: "currency",
-              currency: "RUB",
-            })}
-          </Text>
+        <View style={[styles.containerOrder]}>
+          <View>
+            <Text style={{ color: "#adadab", fontSize: 12 }}>
+              Итоговая цена
+            </Text>
+            <Text
+              style={{ color: "#222223", fontWeight: "bold", fontSize: 25 }}
+            >
+              {totalPrice.toLocaleString("ru-RU", {
+                style: "currency",
+                currency: "RUB",
+              })}
+            </Text>
+          </View>
+
+          <TouchableHighlight
+            underlayColor={"#393939"}
+            onPress={() => {
+              handleAddToOrder();
+            }}
+            style={{
+              ...styles.button,
+              backgroundColor:
+                cartItems?.length === 0 ? "rgba(0, 0, 0, 0.3)" : "#101010",
+            }}
+            disabled={cartItems?.length === 0}
+          >
+            <View style={styles.buttonInner}>
+              <Text style={{ color: "#fff", fontSize: 18 }}>Подтвердить</Text>
+              <Icon style={{ color: "#fff" }} name="arrow-right" size={20} />
+            </View>
+          </TouchableHighlight>
         </View>
-
-        <TouchableHighlight
-          underlayColor={"#393939"}
-          onPress={() => {
-            handleAddToOrder();
-          }}
-          style={{
-            ...styles.button,
-            backgroundColor:
-              cartItems?.length === 0 ? "rgba(0, 0, 0, 0.3)" : "#101010",
-          }}
-          disabled={cartItems?.length === 0}
-        >
-          <View style={styles.buttonInner}>
-            <Text style={{ color: "#fff", fontSize: 18 }}>Подтвердить</Text>
-            <Icon style={{ color: "#fff" }} name="arrow-right" size={20} />
-          </View>
-        </TouchableHighlight>
       </View>
-    </View>
+    </>
   );
 };
 

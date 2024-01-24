@@ -1,19 +1,19 @@
-import { Skeleton } from "@rneui/themed";
+import { Skeleton } from "@rneui/base";
 import { FC } from "react";
 import { StyleSheet, View } from "react-native";
 
-export const OfferSkeleton: FC<{ length?: number }> = ({ length }) => {
+export const FilterBarSkeleton: FC = () => {
   return (
     <View style={styles.container}>
-      {Array.from({ length: length || 10 }).map((_, idx) => (
+      {Array.from({ length: 4 }).map((_, idx) => (
         <Skeleton
           key={idx}
-          width={'100%'}
-          height={120}
+          width={80}
+          height={30}
           skeletonStyle={{
             backgroundColor: "#f3f3f3",
             backfaceVisibility: "hidden",
-            borderRadius: 30,
+            borderRadius: 10,
           }}
           style={{ backgroundColor: "transparent" }}
         />
@@ -24,7 +24,10 @@ export const OfferSkeleton: FC<{ length?: number }> = ({ length }) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 30,
-    gap: 30
+    marginTop: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 30,
+    width: "100%",
   },
 });

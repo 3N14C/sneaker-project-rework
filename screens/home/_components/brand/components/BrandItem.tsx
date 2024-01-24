@@ -17,7 +17,12 @@ export const BrandItem: FC = () => {
   const { data, isLoading } = useQuery<IBrand[]>({
     queryKey: ["brand"],
     queryFn: async (): Promise<IBrand[] | any> => {
-      return (await db.listDocuments(APPWRITE_DB, COLLECTION_BRAND)).documents;
+      try {
+        return (await db.listDocuments(APPWRITE_DB, COLLECTION_BRAND))
+          .documents;
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
 

@@ -71,7 +71,7 @@ export const TodayOffer: FC = () => {
                 }}
                 onPress={() => {
                   //@ts-ignore
-                  navigate("OfferList", { data: item });
+                  navigate("SneakerOffer", item.sneaker);
                 }}
               >
                 <View style={{ ...styles.special_offer_item }} key={item.id}>

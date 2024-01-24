@@ -13,6 +13,7 @@ import { Offer } from "./_components/offer/Offer";
 import { useNavigation } from "@react-navigation/native";
 import { Brand } from "./_components/brand/Brand";
 import { ModalPortal } from "react-native-modals";
+import { Popular } from "./_components/popular/Popular";
 
 export const Home: FC = () => {
   const { user } = useAuth();
@@ -112,10 +113,10 @@ export const Home: FC = () => {
 
                 <Brand />
 
-                {/* <Popular />  */}
+                <Popular /> 
               </>
             )}
-            <StatusBar />
+            <StatusBar backgroundColor={"#000"} />
           </>
         </View>
       </ScrollView>

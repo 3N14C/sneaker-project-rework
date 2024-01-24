@@ -25,15 +25,21 @@ export const SneakerCard: FC<ISneakerCardProps> = ({ sneaker }) => {
     setModalVisible(true);
   };
 
-  return (
-    <>
+  if (modalVisible) {
+    return (
       <ModalSneaker
         modalVisible={modalVisible}
         closeBottomSheet={() => setModalVisible(false)}
       />
+    );
+  }
+
+  return (
+    <>
       <TouchableOpacity
         onPress={() => {
-          setParams({ sneaker: sneaker } as any);
+          // @ts-ignore
+          setParams(sneaker);
           openBottomSheet();
         }}
       >
@@ -108,7 +114,7 @@ export const SneakerCard: FC<ISneakerCardProps> = ({ sneaker }) => {
             </Text>
           </View>
           <Text style={{ ...styles.sneakerPriceOffer }}>
-            {sneaker.offer.discount ? (
+            {sneaker?.offer ? (
               <View
                 style={{
                   flexDirection: "row",
@@ -146,13 +152,10 @@ export const SneakerCard: FC<ISneakerCardProps> = ({ sneaker }) => {
               </View>
             ) : (
               <Text style={{ ...styles.sneakerPrice }}>
-                {parseFloat(
-                  //@ts-ignore
-                  (+sneaker.price * currentPrice).toLocaleString("ru-RU", {
-                    style: "currency",
-                    currency: "RUB",
-                  })
-                )}
+                {(sneaker.price * currentPrice).toLocaleString("ru-RU", {
+                  style: "currency",
+                  currency: "RUB",
+                })}
               </Text>
             )}
           </Text>
